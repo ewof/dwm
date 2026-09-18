@@ -252,13 +252,14 @@ static const Key keys[] = {
 	{ MODKEY,			XK_space,      zoom,                   {0} },
 	{ MODKEY|ShiftMask,		XK_space,      togglefloating,         {0} },
 
-	{ 0,				XK_Print,      spawn,                  SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ 0,                          XK_Print, spawn, SHCMD("maim -u -s | xclip -sel clip -t image/png") },
+	{ ControlMask,                XK_Print, spawn, SHCMD("maim -B -q -d 0.2 -i \"$(xdotool getactivewindow)\" | xclip -sel clip -t image/png") },
+	{ ControlMask|ShiftMask,      XK_Print, spawn, SHCMD("tmpfile=$(mktemp /tmp/ocr-XXXXXX.png) && maim -u -s > \"$tmpfile\" && tesseract \"$tmpfile\" - -l eng | xclip -sel clip && rm \"$tmpfile\"") },
 	{ ShiftMask,			XK_Print,      spawn,                  {.v = (const char*[]){ "maimpick", NULL } } },
 	{ MODKEY,			XK_Print,      spawn,		       {.v = (const char*[]){ "dmenurecord", NULL } } },
 	{ MODKEY|ShiftMask,		XK_Print,      spawn,                  {.v = (const char*[]){ "dmenurecord", "kill", NULL } } },
 	{ MODKEY,			XK_Delete,     spawn,                  {.v = (const char*[]){ "dmenurecord", "kill", NULL } } },
 	{ MODKEY,			XK_Scroll_Lock, spawn,                 SHCMD("killall screenkey || screenkey &") },
-	{ ControlMask,			XK_Insert,      spawn,		       SHCMD("maim -u -s | xclip -sel clip -t image/png") },
 
 	{ 0, XF86XK_AudioMute,                         spawn,                  SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,                  spawn,                  SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%- && wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+; kill -44 $(pidof dwmblocks)") },
